@@ -21,6 +21,7 @@ struct RoomHeaderView: View {
     let action: () -> Void
     
     var body: some View {
+#if compiler(>=6.2)
         if #available(iOS 26.0, *) {
             // On iOS 26+ we use the toolbarRole(.editor) to leading align.
             content
@@ -39,6 +40,12 @@ struct RoomHeaderView: View {
                 .frame(idealWidth: .greatestFiniteMagnitude, maxWidth: .infinity, alignment: .leading)
                 .roomHeaderAction(action)
         }
+#else
+        content
+            // So take up as much space as possible, with a leading alignment for use in the default principal toolbar position
+            .frame(idealWidth: .greatestFiniteMagnitude, maxWidth: .infinity, alignment: .leading)
+            .roomHeaderAction(action)
+#endif
     }
     
     private var content: some View {

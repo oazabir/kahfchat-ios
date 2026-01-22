@@ -113,7 +113,13 @@ class AudioRecorder: AudioRecorderProtocol {
         MXLog.info("setup audio session")
         
         try audioSession.setAllowHapticsAndSystemSoundsDuringRecording(true)
-        try audioSession.setCategory(.playAndRecord, mode: .default, options: [.allowBluetoothHFP])
+        var options: AVAudioSession.CategoryOptions = [.allowBluetooth]
+#if compiler(>=6.2)
+        if #available(iOS 26, *) {
+            options.insert(.allowBluetoothHFP)
+        }
+#endif
+        try audioSession.setCategory(.playAndRecord, mode: .default, options: options)
         try audioSession.setActive(true)
         addObservers()
     }

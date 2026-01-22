@@ -232,6 +232,7 @@ struct MediaEventsTimelineScreen: View {
             }
         }
         
+#if compiler(>=6.2)
         if #available(iOS 26, *) {
             ToolbarSpacer()
         } else {
@@ -240,6 +241,12 @@ struct MediaEventsTimelineScreen: View {
                 CompoundIcon(\.search).hidden()
             }
         }
+#else
+        ToolbarItem(placement: .primaryAction) {
+            // Reserve the space trailing space to match the back button.
+            CompoundIcon(\.search).hidden()
+        }
+#endif
     }
     
     private var screenModePicker: some View {

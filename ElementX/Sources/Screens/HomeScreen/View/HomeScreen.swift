@@ -67,9 +67,11 @@ struct HomeScreen: View {
         }
         
         if context.viewState.spaceFiltersEnabled {
+            #if compiler(>=6.2)
             if #available(iOS 26, *) {
                 ToolbarSpacer(.fixed, placement: .primaryAction)
             }
+            #endif
                
             ToolbarItem(placement: .primaryAction) {
                 SpaceFiltersButton(selected: context.viewState.selectedSpaceFilter != nil) {

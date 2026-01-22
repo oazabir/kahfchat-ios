@@ -11,6 +11,7 @@ import SwiftUI
 import SwiftUIIntrospect
 
 extension TextFieldStyle where Self == ElementTextFieldStyle {
+    @MainActor
     static func element(labelText: String? = nil,
                         footerText: String? = nil,
                         state: ElementTextFieldStyle.State = .default,
@@ -22,6 +23,7 @@ extension TextFieldStyle where Self == ElementTextFieldStyle {
     }
     
     @_disfavoredOverload
+    @MainActor
     static func element(labelText: Text? = nil,
                         footerText: Text? = nil,
                         state: ElementTextFieldStyle.State = .default,
@@ -34,7 +36,8 @@ extension TextFieldStyle where Self == ElementTextFieldStyle {
 }
 
 /// The text field style used in authentication screens.
-struct ElementTextFieldStyle: @MainActor TextFieldStyle {
+@MainActor
+struct ElementTextFieldStyle: TextFieldStyle {
     enum State {
         case success
         case error

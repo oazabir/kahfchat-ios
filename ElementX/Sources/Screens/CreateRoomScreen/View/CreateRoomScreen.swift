@@ -61,11 +61,12 @@ struct CreateRoomScreen: View {
     }
     
     private var nameTextFieldShape: AnyShape {
+#if compiler(>=6.2)
         if #available(iOS 26, *) {
-            AnyShape(ConcentricRectangle(corners: .concentric(minimum: 26)))
-        } else {
-            AnyShape(RoundedRectangle(cornerRadius: 12))
+            return AnyShape(ConcentricRectangle(corners: .concentric(minimum: 26)))
         }
+#endif
+        return AnyShape(RoundedRectangle(cornerRadius: 12))
     }
     
     private var roomSection: some View {

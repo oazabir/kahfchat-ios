@@ -34,6 +34,9 @@ version_changes.md
 
 build
 /vendor/
+!/Vendor/
+!/Vendor/SFSafeSymbols/
+!/Vendor/SFSafeSymbols/**
 
 ## macOS Files
 .DS_Store

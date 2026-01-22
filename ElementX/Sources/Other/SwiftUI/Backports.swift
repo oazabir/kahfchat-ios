@@ -13,11 +13,15 @@ extension View {
     // MARK: iOS 26
     
     @ViewBuilder func backportTabBarMinimizeBehaviorOnScrollDown() -> some View {
+#if compiler(>=6.2)
         if #available(iOS 26.0, *) {
             tabBarMinimizeBehavior(.onScrollDown)
         } else {
             self
         }
+#else
+        self
+#endif
     }
     
     @ViewBuilder
@@ -25,30 +29,43 @@ extension View {
                              alignment: HorizontalAlignment = .center,
                              spacing: CGFloat? = nil,
                              content: () -> some View) -> some View {
+#if compiler(>=6.2)
         if #available(iOS 26.0, *) {
             safeAreaBar(edge: edge, alignment: alignment, spacing: spacing, content: content)
         } else {
             safeAreaInset(edge: edge, alignment: alignment, spacing: spacing) { content().background(Color.compound.bgCanvasDefault.ignoresSafeArea()) }
         }
+#else
+        safeAreaInset(edge: edge, alignment: alignment, spacing: spacing) { content().background(Color.compound.bgCanvasDefault.ignoresSafeArea()) }
+#endif
     }
     
     @ViewBuilder func backportScrollEdgeEffectHidden() -> some View {
+#if compiler(>=6.2)
         if #available(iOS 26, *) {
             scrollEdgeEffectHidden()
         } else {
             self
         }
+#else
+        self
+#endif
     }
     
     @ViewBuilder func backportButtonStyleGlass() -> some View {
+#if compiler(>=6.2)
         if #available(iOS 26, *) {
             buttonStyle(.glass)
         } else {
             self
         }
+#else
+        self
+#endif
     }
     
     @ViewBuilder func backportButtonStyleGlassProminent() -> some View {
+#if compiler(>=6.2)
         if #available(iOS 26, *) {
             // `.glassProminent` breaks our preview tests so we need to disable it when running tests.
             // https://github.com/pointfreeco/swift-snapshot-testing/issues/1029#issuecomment-3366942138
@@ -60,15 +77,22 @@ extension View {
         } else {
             buttonStyle(.borderedProminent)
         }
+#else
+        buttonStyle(.borderedProminent)
+#endif
     }
 }
 
 extension ToolbarContent {
     @ToolbarContentBuilder func backportSharedBackgroundVisibility(_ visibility: Visibility) -> some ToolbarContent {
+#if compiler(>=6.2)
         if #available(iOS 26.0, *) {
             sharedBackgroundVisibility(visibility)
         } else {
             self
         }
+#else
+        self
+#endif
     }
 }
