@@ -311,7 +311,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
             case .signInManually:
                 navigationStackCoordinator.setSheetCoordinator(nil)
                 stateMachine.tryEvent(.cancelledLoginWithQR)
-                stateMachine.tryEvent(.confirmServer(.login))
+                loginWithDefaultServer()
             case .dismiss:
                 navigationStackCoordinator.setSheetCoordinator(nil)
                 stateMachine.tryEvent(.cancelledLoginWithQR)
@@ -330,6 +330,41 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         
         stackCoordinator.setRootCoordinator(coordinator)
         navigationStackCoordinator.setSheetCoordinator(stackCoordinator) // Don't use the callback (interactive dismiss disabled), choose the event with the action.
+    }
+
+    private func loginWithDefaultServer(loginHint: String? = nil) {
+        Task { await loginWithDefaultServerInternal(loginHint: loginHint) }
+    }
+
+    private func loginWithDefaultServerInternal(loginHint: String?) async {
+        guard let defaultServerName = appSettings.accountProviders.first else {
+            stateMachine.tryEvent(.confirmServer(.login))
+            return
+        }
+        
+        let loadingIndicatorID = "\(AuthenticationFlowCoordinator.self)-DefaultLogin"
+        userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorID,
+                                                              type: .modal,
+                                                              title: L10n.commonLoading,
+                                                              persistent: true))
+        defer { userIndicatorController.retractIndicatorWithId(loadingIndicatorID) }
+        
+        guard case .success = await authenticationService.configure(for: defaultServerName, flow: .login) else {
+            stateMachine.tryEvent(.confirmServer(.login))
+            return
+        }
+        
+        guard authenticationService.homeserver.value.loginMode.supportsOIDCFlow else {
+            stateMachine.tryEvent(.continueWithPassword, userInfo: loginHint)
+            return
+        }
+        
+        switch await authenticationService.urlForOIDCLogin(loginHint: loginHint) {
+        case .success(let oidcData):
+            stateMachine.tryEvent(.continueWithOIDC, userInfo: (oidcData, appMediator.windowManager.mainWindow))
+        case .failure:
+            stateMachine.tryEvent(.confirmServer(.login))
+        }
     }
     
     // MARK: - Manual Authentication

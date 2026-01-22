@@ -18,12 +18,12 @@ struct AuthenticationStartScreen: View {
     var body: some View {
         GeometryReader { geometry in
             VStack(alignment: .leading, spacing: 0) {
-                Spacer()
-                    .frame(height: UIConstants.spacerHeight(in: geometry))
-                
                 content
                     .frame(width: geometry.size.width)
                     .accessibilityIdentifier(A11yIdentifiers.authenticationStartScreen.hidden)
+                    .padding(.top, UIConstants.spacerHeight(in: geometry))
+                
+                Spacer(minLength: 0)
                 
                 buttons
                     .frame(width: geometry.size.width)
@@ -57,35 +57,18 @@ struct AuthenticationStartScreen: View {
     }
     
     var content: some View {
-        VStack(spacing: 0) {
-            Spacer()
-            
-            if verticalSizeClass == .regular {
-                Spacer()
-                
-                AuthenticationStartLogo(hideBrandChrome: context.viewState.hideBrandChrome)
-            }
-            
-            Spacer()
-            
+        VStack(spacing: 8) {
             if !context.viewState.hideBrandChrome {
-                VStack(spacing: 8) {
-                    Text(L10n.screenOnboardingWelcomeTitle)
-                        .font(.compound.headingLGBold)
-                        .foregroundColor(.compound.textPrimary)
-                        .multilineTextAlignment(.center)
-                    Text(L10n.screenOnboardingWelcomeMessage(InfoPlistReader.main.productionAppName))
-                        .font(.compound.bodyLG)
-                        .foregroundColor(.compound.textSecondary)
-                        .multilineTextAlignment(.center)
-                }
-                .padding()
-                .fixedSize(horizontal: false, vertical: true)
+                Text("Private, Safe chat")
+                    .font(.compound.headingLGBold)
+                    .foregroundColor(.compound.textPrimary)
+                    .multilineTextAlignment(.center)
+                Text("Build on Element X and Matrix protocol")
+                    .font(.compound.bodyLG)
+                    .foregroundColor(.compound.textSecondary)
+                    .multilineTextAlignment(.center)
             }
-            
-            Spacer()
         }
-        .padding(.bottom)
         .padding(.horizontal, 16)
         .readableFrame()
     }
@@ -106,13 +89,6 @@ struct AuthenticationStartScreen: View {
             }
             .buttonStyle(.compound(.primary))
             .accessibilityIdentifier(A11yIdentifiers.authenticationStartScreen.signIn)
-            
-            if context.viewState.showCreateAccountButton {
-                Button { context.send(viewAction: .register) } label: {
-                    Text(L10n.screenCreateAccountTitle)
-                }
-                .buttonStyle(.compound(.tertiary))
-            }
         }
         .padding(.horizontal, verticalSizeClass == .compact ? 128 : 24)
         .readableFrame()

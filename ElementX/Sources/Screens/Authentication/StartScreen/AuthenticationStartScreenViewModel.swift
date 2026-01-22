@@ -85,6 +85,8 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
     private func login() async {
         if let serverName = state.serverName {
             await configureAccountProvider(serverName, loginHint: provisioningParameters?.loginHint)
+        } else if let defaultServerName = appSettings.accountProviders.first {
+            await configureAccountProvider(defaultServerName, loginHint: provisioningParameters?.loginHint)
         } else {
             actionsSubject.send(.login) // No need to configure anything here, continue the flow.
         }

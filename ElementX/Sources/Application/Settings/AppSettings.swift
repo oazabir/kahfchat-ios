@@ -186,7 +186,7 @@ final class AppSettings {
     ///
     /// Account provider is the friendly term for the server name. It should not contain an `https` prefix and should
     /// match the last part of the user ID. For example `example.com` and not `https://matrix.example.com`.
-    private(set) var accountProviders = ["matrix.org"]
+    private(set) var accountProviders = ["matrix.kahf.co.uk"]
     /// Whether or not the user is allowed to manually enter their own account provider or must select from one of `defaultAccountProviders`.
     private(set) var allowOtherAccountProviders = true
     /// Whether the components surrounding the app brand/logo should be hidden or not
@@ -256,7 +256,7 @@ final class AppSettings {
     /// Whether or not the Create Account button is shown on the start screen.
     ///
     /// **Note:** Setting this to false doesn't prevent someone from creating an account when the selected homeserver's MAS allows registration.
-    let showCreateAccountButton = true
+    let showCreateAccountButton = false
     
     // MARK: - Notifications
     
