@@ -25,6 +25,22 @@ struct AuthenticationStartScreen: View {
                 
                 Spacer(minLength: 0)
                 
+                HStack {
+                    Spacer()
+                    VStack(spacing: 4) {
+                        Image(asset: Asset.Images.appLogo)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 120)
+                        
+                        Text("Kahf Chat")
+                            .font(Font.compound.headingLGBold.bold())
+                    }
+                    Spacer()
+                }
+                
+                Spacer(minLength: 0)
+                
                 buttons
                     .frame(width: geometry.size.width)
                     .padding(.bottom, UIConstants.actionButtonBottomPadding)
